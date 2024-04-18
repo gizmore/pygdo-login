@@ -4,6 +4,8 @@ import unittest
 from gdo.base.Application import Application
 from gdo.base.ModuleLoader import ModuleLoader
 from gdo.base.Trans import t
+from gdo.core.connector.Web import Web
+from gdo.login import module_login
 from gdotest.TestUtil import install_module, web_plug
 
 
@@ -11,9 +13,11 @@ class LoginTest(unittest.TestCase):
 
     def setUp(self):
         Application.init(os.path.dirname(__file__ + "/../../../../"))
-        install_module('login')
-        ModuleLoader.instance().load_modules_db(True)
-        ModuleLoader.instance().init_modules()
+        loader = ModuleLoader.instance()
+        loader.load_modules_db(True)
+        loader.init_modules()
+        user = Web.get_server().get_or_create_user('gizmore')
+        module_login.instance().set_password_for(user, '11111111')
         return self
 
     def test_login_form_render(self):
