@@ -30,6 +30,10 @@ class LoginTest(unittest.TestCase):
         result = web_plug('login.form.html').post({"submit": "1", "login": "", "password": "11111111"}).exec()
         self.assertIn(t('err_not_null'), result, 'does not execute command or does not display required username')
 
+    def test_login_form_timeout(self):
+        result = web_plug('login.form.html').post({"submit": "1", "login": "not_gizmore", "password": "11111111"}).exec()
+        self.assertIn('aaa', result, 'login.form does not have a bruteforce protection')
+
 
 if __name__ == '__main__':
     unittest.main()

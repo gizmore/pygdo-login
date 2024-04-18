@@ -3,3 +3,5 @@ module_login = "Login"
 # Login
 bind_ip = "Bind IP"
 tt_bind_ip = "Makes your session only work with your current IP. Deselect only when you got automatic logouts or no working login"
+mt_login_form = "Login"
+md_login_form = "Login to this website."
