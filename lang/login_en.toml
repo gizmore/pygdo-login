@@ -1,7 +1,14 @@
 module_login = "Login"
 
-# Login
+#########
+# Login #
+#########
 bind_ip = "Bind IP"
 tt_bind_ip = "Makes your session only work with your current IP. Deselect only when you got automatic logouts or no working login"
 mt_login_form = "Login"
 md_login_form = "Login to this website."
+err_login_failed = "Authentication failure. You have %s more attempt(s) until you are banned for %s."
+err_login_ban = "Too much authentication failures, you are now blocked. Please wait %s until you try again."
+msg_authenticated = "Welcome back %s! You have been authenticated for the very first time!"
+msg_authenticated_again = "Welcome back %s! You have been authenticated again. Your last login was %s from %s."
+msg_authenticated_backto = "You can now go back to %s."
