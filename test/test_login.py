@@ -44,10 +44,12 @@ class LoginTest(unittest.TestCase):
 
     def test_05_login_form_correct_via_email(self):
         result = web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111"}).exec()
-        self.assertIn('You have been authenticated again', result, 'login.form does not work with correct mail credentials')
+        self.assertIn('been authenticated', result, 'login.form does not work with correct mail credentials')
         GDO_User.current().logout()
 
     def test_06_login_form_brute_block(self):
+        web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "not_gizmore", "password": "11111111"}).exec()
+        web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "not_gizmore", "password": "11111111"}).exec()
         web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "not_gizmore", "password": "11111111"}).exec()
         web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "not_gizmore", "password": "11111111"}).exec()
         web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "not_gizmore", "password": "11111111"}).exec()

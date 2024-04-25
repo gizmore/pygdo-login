@@ -71,7 +71,7 @@ class form(MethodForm):
     def ban_cut(self) -> float:
         return Application.TIME - self.ban_timeout()
 
-    def ban_timeout(self) -> int:
+    def ban_timeout(self) -> float:
         return module_login.instance().cfg_failure_timeout()
 
     def max_attempts(self) -> int:
@@ -87,7 +87,7 @@ class form(MethodForm):
         # if user:
             # self.check_security_threat(user)
         min_time, attempts = self.ban_data()
-        banned_for = float(min_time) - self.ban_cut()
+        banned_for = float(min_time or 0) - self.ban_cut()
         attempts_left = self.max_attempts() - int(attempts)
         self.err('err_login_failed', [attempts_left, Time.human_duration(banned_for)])
         return self.get_form()
