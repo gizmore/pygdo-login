@@ -84,8 +84,8 @@ class form(MethodForm):
             'la_ip': ip,
             'la_user': userid,
         }).insert()
-        # if user:
-            # self.check_security_threat(user)
+        if user:
+            self.check_security_threat(user)
         min_time, attempts = self.ban_data()
         banned_for = float(min_time or 0) - self.ban_cut()
         attempts_left = self.max_attempts() - int(attempts)
