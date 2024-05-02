@@ -22,26 +22,20 @@ class form(MethodForm):
         form.add_field(GDT_Login('login').not_null())
         form.add_field(GDT_Password('password').not_null())
         form.add_field(GDT_Bool('bind_ip').not_null().initial('1'))
-        form.add_field(GDT_Url('_back_to').hidden()),
+        form.add_field(GDT_Url('_back_to').internal().hidden())
         super().gdo_create_form(form)
 
-    def gdo_execute(self):
+    def form_submitted(self):
         return self.on_login(self.param_val('login'), self.param_val('password'), self.param_value('bind_ip'))
 
     def get_user(self, login: str) -> GDO_User | None:
         if hasattr(self, '_user'):
             return self._user
         server = Web.get_server()
-        # sid = server.get_id()
-        user = server.get_user_by_name(login)
+        user = server.get_user_by_login(login)
         if user:
             self._user = user
-            return user
-        user = server.get_users_with_setting('email', login).first().exec().fetch_object()
-        if user:
-            self._user = user
-            return user
-        return None
+        return user
 
     def on_login(self, login: str, password: str, bind_ip: bool = False) -> GDT:
         if not self.ban_check():

@@ -16,6 +16,11 @@ class module_login(GDO_Module):
         super().__init__()
         self._priority = 80
 
+    def gdo_dependencies(self) -> list:
+        return [
+            'form',
+        ]
+
     def gdo_classes(self):
         return [
             GDO_LoginAttempt,

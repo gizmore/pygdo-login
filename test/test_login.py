@@ -7,6 +7,7 @@ from gdo.base.Trans import t
 from gdo.core.GDO_User import GDO_User
 from gdo.core.connector.Web import Web
 from gdo.login import module_login
+from gdo.mail import module_mail
 from gdotest.TestUtil import web_plug, reinstall_module
 
 
@@ -20,7 +21,7 @@ class LoginTest(unittest.TestCase):
         reinstall_module('login')
         user = Web.get_server().get_or_create_user('gizmore')
         module_login.instance().set_password_for(user, '11111111')
-        user.save_setting('email', 'gizmore@gizmore.org')
+        module_mail.instance().set_email_for(user, 'gizmore@gizmore.org')
         return self
 
     def test_01_login_form_render(self):
@@ -54,13 +55,13 @@ class LoginTest(unittest.TestCase):
         web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "not_gizmore", "password": "11111111"}).exec()
         web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "not_gizmore", "password": "11111111"}).exec()
         result = web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "gizmore", "password": "11111111"}).exec()
-        self.assertIn('Too much authentication failures,', result, 'login.form does not ban users for bruteforcing logins')
+        self.assertIn('Too much authentication failures,', result, 'login.form does not ban users for brute forcing logins')
 
     def test_07_login_with_ref_back(self):
         post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome2.html'}
         result = web_plug('login.form.html').post(post_data).exec()
         self.assertIn('Welcome back gizmore!', result, 'login.form does not login showing refback')
-        self.assertIn('core.welcome2.html', result, 'login.form does not show refback')
+        self.assertIn('core.welcome2.html', result, 'login.form does not show ref back')
 
 
 if __name__ == '__main__':
