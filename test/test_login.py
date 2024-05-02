@@ -58,10 +58,16 @@ class LoginTest(unittest.TestCase):
         self.assertIn('Too much authentication failures,', result, 'login.form does not ban users for brute forcing logins')
 
     def test_07_login_with_ref_back(self):
-        post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome2.html'}
+        post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
         result = web_plug('login.form.html').post(post_data).exec()
         self.assertIn('Welcome back gizmore!', result, 'login.form does not login showing refback')
-        self.assertIn('core.welcome2.html', result, 'login.form does not show ref back')
+        self.assertIn('core.welcome.html', result, 'login.form does not show ref back')
+
+    def test_08_login_session_bind_ip(self):
+        post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
+        web_plug('login.form.html').post(post_data).exec()
+        result = web_plug('login.form.html').exec()
+        self.assertIn('method is restricted to', result, 'Authentication did not persist in session')
 
 
 if __name__ == '__main__':

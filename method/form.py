@@ -1,9 +1,11 @@
 from gdo.base.Application import Application
 from gdo.base.GDT import GDT
 from gdo.base.Util import Strings
+from gdo.base.WithPermissionCheck import WithPermissionCheck
 from gdo.core.GDO_User import GDO_User
 from gdo.core.GDT_Bool import GDT_Bool
 from gdo.core.GDT_Password import GDT_Password
+from gdo.core.GDT_UserType import GDT_UserType
 from gdo.core.connector.Web import Web
 from gdo.date.Time import Time
 from gdo.form.GDT_Form import GDT_Form
@@ -13,10 +15,14 @@ from gdo.login.GDO_LoginAttempt import GDO_LoginAttempt
 from gdo.login.GDT_Login import GDT_Login
 from gdo.net.GDT_IP import GDT_IP
 from gdo.net.GDT_Url import GDT_Url
+from gdo.ui.GDT_Link import GDT_Link
 
 
-class form(MethodForm):
+class form(WithPermissionCheck, MethodForm):
     _user: GDO_User
+
+    def gdo_user_type(self) -> str | None:
+        return GDT_UserType.GHOST
 
     def gdo_create_form(self, form: GDT_Form) -> None:
         form.add_field(GDT_Login('login').not_null())
@@ -113,19 +119,16 @@ class form(MethodForm):
         return None, None
 
     def login_success(self, user: GDO_User, bind_ip: bool = False) -> GDT:
-        user.authenticate(bind_ip)
         last_ip, last_date = self.get_last_login_data()
         if last_ip:
             self.msg('msg_authenticated_again', [user.render_name(), Time.display_date(last_date), last_ip])
         else:
             self.msg('msg_authenticated', [user.render_name()])
-
-        user.save_setting('last_login_ip', GDT_IP.current())
-        user.save_setting('last_login_datetime', Time.get_date())
-
+        user.authenticate(self._env_session, bind_ip)
         back = self.param_val('_back_to')
         if back:
-            self.msg('msg_back_to', [Strings.html(back)])
+            link = GDT_Link().href(back).render()
+            self.msg('msg_back_to', [Strings.html(link)])
         return self.get_form()
         # msg('msg_authenticated',)
         # if module_enabled('Session'):
