@@ -69,6 +69,11 @@ class LoginTest(unittest.TestCase):
         result = web_plug('login.form.html').exec()
         self.assertIn('method is restricted to', result, 'Authentication did not persist in session')
 
+    def test_09_login_with_bind_ip(self):
+        post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
+        web_plug('login.form.html').post(post_data).exec()
+
+
 
 if __name__ == '__main__':
     unittest.main()
