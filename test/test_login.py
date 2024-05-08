@@ -39,16 +39,17 @@ class LoginTest(unittest.TestCase):
         self.assertIn('Authentication failure. You have ', result, 'login.form does not fail correctly')
 
     def test_04_login_form_correct(self):
+        web_plug('login.logout.html').exec()
         result = web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "gizmore", "password": "11111111"}).exec()
         self.assertIn('Welcome back gizmore!', result, 'login.form does not work with correct credentials')
-        GDO_User.current().logout()
 
     def test_05_login_form_correct_via_email(self):
+        web_plug('login.logout.html').exec()
         result = web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111"}).exec()
         self.assertIn('been authenticated', result, 'login.form does not work with correct mail credentials')
-        GDO_User.current().logout()
 
     def test_06_login_form_brute_block(self):
+        web_plug('login.logout.html').exec()
         web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "not_gizmore", "password": "11111111"}).exec()
         web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "not_gizmore", "password": "11111111"}).exec()
         web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "not_gizmore", "password": "11111111"}).exec()
@@ -58,20 +59,28 @@ class LoginTest(unittest.TestCase):
         self.assertIn('Too much authentication failures,', result, 'login.form does not ban users for brute forcing logins')
 
     def test_07_login_with_ref_back(self):
+        web_plug('login.logout.html').exec()
         post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
         result = web_plug('login.form.html').post(post_data).exec()
         self.assertIn('Welcome back gizmore!', result, 'login.form does not login showing refback')
         self.assertIn('core.welcome.html', result, 'login.form does not show ref back')
 
-    def test_08_login_session_bind_ip(self):
+    def test_08_login_session(self):
+        web_plug('login.logout.html').exec()
         post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
         web_plug('login.form.html').post(post_data).exec()
         result = web_plug('login.form.html').exec()
         self.assertIn('method is restricted to', result, 'Authentication did not persist in session')
+        web_plug('login.logout.html')
 
     def test_09_login_with_bind_ip(self):
+        web_plug('login.logout.html').exec()
         post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
-        web_plug('login.form.html').post(post_data).exec()
+        result = web_plug('login.form.html').post(post_data).exec()
+        self.assertIn('Welcome back gizmore!', result, 'login.form does not login showing refback')
+        post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
+        result = web_plug('login.form.html').ip('::2').post(post_data).exec()
+        self.assertIn('Welcome back gizmore!', result, 'login.form does not login showing refback')
 
 
 
