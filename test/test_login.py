@@ -19,6 +19,7 @@ class LoginTest(unittest.TestCase):
         loader.load_modules_db(True)
         loader.init_modules()
         reinstall_module('login')
+        reinstall_module('mail')
         user = Web.get_server().get_or_create_user('gizmore')
         module_login.instance().set_password_for(user, '11111111')
         module_mail.instance().set_email_for(user, 'gizmore@gizmore.org')
