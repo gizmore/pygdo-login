@@ -19,3 +19,15 @@ msg_authenticated_backto = "You can now go back to %s."
 mt_login_logout = "Logout"
 md_login_logout = "Logout of your account."
 msg_logged_out = "You are now logged out."
+
+##########
+# Change #
+##########
+mt_login_change_password = "Change Password"
+md_login_change_password = "Change Password"
+err_wrong_password = "The provided password is wrong."
+err_password_retype = "Your new password does not match the retype."
+msg_password_changed = "Your password has been changed successfully."
+old_password = "Old Password"
+new_password = "New Password"
+retype = "Retype New Password"

@@ -1,7 +1,7 @@
 from gdo.base.GDO_Module import GDO_Module
 from gdo.base.GDT import GDT
 from gdo.core.GDO_User import GDO_User
-from gdo.core.GDT_Password import Password, GDT_Password
+from gdo.core.GDT_Password import GDT_Password
 from gdo.core.GDT_UInt import GDT_UInt
 from gdo.date.GDT_DateTime import GDT_DateTime
 from gdo.date.GDT_Duration import GDT_Duration
@@ -53,4 +53,4 @@ class module_login(GDO_Module):
             page._right_bar.add_field(GDT_Link().href(self.href('logout')).text('mt_login_logout'))
 
     def set_password_for(self, user: GDO_User, password: str) -> None:
-        user.save_setting('password', Password.hash(password))
+        user.save_setting('password', GDT_Password.hash(password))

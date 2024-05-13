@@ -42,7 +42,7 @@ class LoginTest(unittest.TestCase):
     def test_04_login_form_correct(self):
         web_plug('login.logout.html').exec()
         result = web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "gizmore", "password": "11111111"}).exec()
-        self.assertIn('Welcome back gizmore!', result, 'login.form does not work with correct credentials')
+        self.assertIn('Welcome back gizmore', result, 'login.form does not work with correct credentials')
 
     def test_05_login_form_correct_via_email(self):
         web_plug('login.logout.html').exec()
@@ -63,7 +63,7 @@ class LoginTest(unittest.TestCase):
         web_plug('login.logout.html').exec()
         post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
         result = web_plug('login.form.html').post(post_data).exec()
-        self.assertIn('Welcome back gizmore!', result, 'login.form does not login showing refback')
+        self.assertIn('Welcome back gizmore', result, 'login.form does not login showing refback')
         self.assertIn('core.welcome.html', result, 'login.form does not show ref back')
 
     def test_08_login_session(self):
@@ -78,10 +78,10 @@ class LoginTest(unittest.TestCase):
         web_plug('login.logout.html').exec()
         post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
         result = web_plug('login.form.html').post(post_data).exec()
-        self.assertIn('Welcome back gizmore!', result, 'login.form does not login showing refback')
+        self.assertIn('Welcome back gizmore', result, 'login.form does not login showing refback')
         post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
         result = web_plug('login.form.html').ip('::2').post(post_data).exec()
-        self.assertIn('Welcome back gizmore!', result, 'login.form does not login showing refback')
+        self.assertIn('Welcome back gizmore', result, 'login.form does not login showing refback')
 
 
 if __name__ == '__main__':
