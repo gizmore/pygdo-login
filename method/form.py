@@ -1,7 +1,6 @@
 from gdo.base.Application import Application
 from gdo.base.GDT import GDT
 from gdo.base.Util import Strings
-from gdo.base.WithPermissionCheck import WithPermissionCheck
 from gdo.core.GDO_User import GDO_User
 from gdo.core.GDT_Bool import GDT_Bool
 from gdo.core.GDT_Password import GDT_Password
@@ -18,7 +17,7 @@ from gdo.net.GDT_Url import GDT_Url
 from gdo.ui.GDT_Link import GDT_Link
 
 
-class form(WithPermissionCheck, MethodForm):
+class form(MethodForm):
     _user: GDO_User
 
     def gdo_user_type(self) -> str | None:

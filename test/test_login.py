@@ -84,6 +84,5 @@ class LoginTest(unittest.TestCase):
         self.assertIn('Welcome back gizmore!', result, 'login.form does not login showing refback')
 
 
-
 if __name__ == '__main__':
     unittest.main()

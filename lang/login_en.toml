@@ -12,3 +12,10 @@ err_login_ban = "Too much authentication failures, you are now blocked. Please w
 msg_authenticated = "Welcome back %s! You have been authenticated for the very first time!"
 msg_authenticated_again = "Welcome back %s! You have been authenticated again. Your last login was %s from %s."
 msg_authenticated_backto = "You can now go back to %s."
+
+##########
+# Logout #
+##########
+mt_login_logout = "Logout"
+md_login_logout = "Logout of your account."
+msg_logged_out = "You are now logged out."

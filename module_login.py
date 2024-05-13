@@ -46,7 +46,11 @@ class module_login(GDO_Module):
         ]
 
     def gdo_init_sidebar(self, page):
-        page._right_bar.add_field(GDT_Link().href(self.href('form')).text('module_login'))
+        user = GDO_User.current()
+        if user.is_ghost():
+            page._right_bar.add_field(GDT_Link().href(self.href('form')).text('module_login'))
+        elif user.is_authenticated():
+            page._right_bar.add_field(GDT_Link().href(self.href('logout')).text('mt_login_logout'))
 
     def set_password_for(self, user: GDO_User, password: str) -> None:
         user.save_setting('password', Password.hash(password))
