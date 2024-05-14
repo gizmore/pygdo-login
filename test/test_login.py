@@ -8,7 +8,7 @@ from gdo.core.GDO_User import GDO_User
 from gdo.core.connector.Web import Web
 from gdo.login import module_login
 from gdo.mail import module_mail
-from gdotest.TestUtil import web_plug, reinstall_module
+from gdotest.TestUtil import web_plug, reinstall_module, WebPlug
 
 
 class LoginTest(unittest.TestCase):
@@ -23,6 +23,7 @@ class LoginTest(unittest.TestCase):
         user = Web.get_server().get_or_create_user('gizmore')
         module_login.instance().set_password_for(user, '11111111')
         module_mail.instance().set_email_for(user, 'gizmore@gizmore.org')
+        WebPlug.COOKIES = {}
         return self
 
     def test_01_login_form_render(self):
@@ -78,7 +79,7 @@ class LoginTest(unittest.TestCase):
         web_plug('login.logout.html').exec()
         post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
         result = web_plug('login.form.html').post(post_data).exec()
-        self.assertIn('Welcome back gizmore', result, 'login.form does not login showing refback')
+        self.assertIn('Welcome back gizmore', result, 'login.form does not work with bind IP')
         post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
         result = web_plug('login.form.html').ip('::2').post(post_data).exec()
         self.assertIn('Welcome back gizmore', result, 'login.form does not login showing refback')
