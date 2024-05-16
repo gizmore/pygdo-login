@@ -127,7 +127,7 @@ class form(MethodForm):
         back = self.param_val('_back_to')
         if back:
             link = GDT_Link().href(back).render()
-            self.msg('msg_back_to', [Strings.html(link)])
+            self.msg('msg_back_to', [link])
         return self.get_form()
         # msg('msg_authenticated',)
         # if module_enabled('Session'):
