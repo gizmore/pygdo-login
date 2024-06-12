@@ -34,7 +34,7 @@ class LoginTest(unittest.TestCase):
 
     def test_02_login_form_incomplete(self):
         result = web_plug('login.form.html').post({"submit": "1", "login": "", "password": "11111111"}).exec()
-        self.assertIn(t('err_not_null'), result, 'does not execute command or does not display required username')
+        self.assertIn('This field may not be left empty', result, 'does not execute command or does not display required username')
 
     def test_03_login_form_fail_unknown_user(self):
         result = web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "not_gizmore", "password": "11111111"}).exec()
