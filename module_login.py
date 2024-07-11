@@ -54,3 +54,6 @@ class module_login(GDO_Module):
 
     def set_password_for(self, user: GDO_User, password: str) -> None:
         user.save_setting('password', GDT_Password.hash(password))
+
+    def set_password_hash_for(self, user: GDO_User, password_hash: str) -> None:
+        user.save_setting('password', password_hash)

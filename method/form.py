@@ -1,6 +1,7 @@
 from gdo.base.Application import Application
 from gdo.base.GDT import GDT
-from gdo.base.Util import Strings
+from gdo.base.Trans import sitename, t
+from gdo.base.Util import Strings, module_enabled
 from gdo.core.GDO_User import GDO_User
 from gdo.core.GDT_Bool import GDT_Bool
 from gdo.core.GDT_Password import GDT_Password
@@ -12,6 +13,7 @@ from gdo.form.MethodForm import MethodForm
 from gdo.login import module_login
 from gdo.login.GDO_LoginAttempt import GDO_LoginAttempt
 from gdo.login.GDT_Login import GDT_Login
+from gdo.mail.Mail import Mail
 from gdo.net.GDT_IP import GDT_IP
 from gdo.net.GDT_Url import GDT_Url
 from gdo.ui.GDT_Link import GDT_Link
@@ -92,23 +94,20 @@ class form(MethodForm):
         return self.get_form()
 
     def check_security_threat(self, user: GDO_User) -> None:
-        # dbms = Module_DBMS.instance()
         table = GDO_LoginAttempt.table()
-        # fromUnix = dbms.dbmsFromUnixtime(self.banCut())
-        condition = f"la_user_id={user.get_id()} AND la_created > {fromUnix}"
-        if table.countWhere(condition) == 1:
+        cut = Time.get_date(self.ban_cut())
+        condition = f"la_user={user.get_id()} AND la_created > '{cut}'"
+        if table.count_where(condition) == 1:
             if module_enabled('Mail'):
-                self.mailSecurityThreat(user)
+                self.mail_security_threat(user)
 
-    def mailSecurityThreat(self, user: GDO_User) -> None:
-        mail = Mail()
-        mail.setSender(GDO_BOT_EMAIL)
-        mail.setSubject(t('mail_subj_login_threat', [sitename()]))
-        revealIP = Module_Login.instance().cfgFailureIPReveal()
-        ip = GDT_IP.current() if revealIP else 'xx.xx.xx.xx'
-        args = [user.renderName(), sitename(), ip]
-        mail.setBody(t('mail_body_login_threat', args))
-        mail.sendToUser(user)
+    def mail_security_threat(self, user: GDO_User) -> None:
+        mail = Mail.from_bot()
+        mail.subject(t('mails_login_threat'))
+        ip = GDT_IP.current()
+        args = [user.render_name(), sitename(), ip]
+        mail.body(t('mailb_login_threat', args))
+        mail.send_to_user(user)
 
     def get_last_login_data(self) -> tuple | None:
         ip = self._user.get_setting_val('last_login_ip')
@@ -118,6 +117,7 @@ class form(MethodForm):
         return None, None
 
     def login_success(self, user: GDO_User, bind_ip: bool = False) -> GDT:
+        self._user = user
         last_ip, last_date = self.get_last_login_data()
         if last_ip:
             self.msg('msg_authenticated_again', [user.render_name(), Time.display_date(last_date), last_ip])
@@ -129,32 +129,3 @@ class form(MethodForm):
             link = GDT_Link().href(back).render()
             self.msg('msg_back_to', [link])
         return self.get_form()
-        # msg('msg_authenticated',)
-        # if module_enabled('Session'):
-        #     session = GDO_Session.instance()
-        #     if not session:
-        #         return self.error('err_session_required')
-        #     session.setVar('sess_user', user.getID())
-        #     GDO_User.setCurrent(user)
-        #     if bindIP:
-        #         session.setVar('sess_ip', GDT_IP.current())
-        #     GDT_Hook.callWithIPC('UserAuthenticated', user)
-        #     self.message('msg_authenticated', [user.renderUserName()])
-        #     if href := self.gdoParameterVar('_backto'):
-        #         self.message('msg_back_to', [html(href)])
-        # else:
-        #     return self.error('err_session_required')
-        # return GDT_Response.make()
-
-    # def validateDeleted(self, form: GDT_Form, field: GDT, value) -> bool:
-    #     user = GDO_User.getByLogin(value)
-    #     if user and user.isDeleted():
-    #         return field.error('err_user_deleted')
-    #     return True
-    #
-    # def validateType(self, form: GDT_Form, field: GDT, value) -> bool:
-    #     if value:
-    #         user = GDO_User.getByLogin(value)
-    #         if user and not user.isMember():
-    #             return field.error('err_user_type', [t('enum_member')])
-    #     return True
