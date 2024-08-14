@@ -9,8 +9,8 @@ from gdo.login import module_login
 
 class change_password(MethodForm):
 
-    def __init__(self):
-        super().__init__()
+    def gdo_trigger(self) -> str:
+        return ""
 
     def gdo_user_type(self) -> str | None:
         return 'guest,member'

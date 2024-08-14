@@ -3,6 +3,9 @@ from gdo.base.Method import Method
 
 class logout(Method):
 
+    def gdo_trigger(self) -> str:
+        return ""
+
     def gdo_user_type(self) -> str | None:
         return 'member,guest'
 

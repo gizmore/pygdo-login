@@ -22,6 +22,9 @@ from gdo.ui.GDT_Link import GDT_Link
 class form(MethodForm):
     _user: GDO_User
 
+    def gdo_trigger(self) -> str:
+        return ""
+
     def gdo_user_type(self) -> str | None:
         return GDT_UserType.GHOST
 
@@ -51,7 +54,7 @@ class form(MethodForm):
         if not user:
             return self.login_failed(user)
         hash_ = user.get_setting_val('password')
-        if not GDT_Password.check(hash_, password):
+        if not hash_ or not GDT_Password.check(hash_, password):
             return self.login_failed(user)
         return self.login_success(user, bind_ip)
 
