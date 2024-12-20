@@ -45,8 +45,8 @@ class module_login(GDO_Module):
             GDT_DateTime('last_login_datetime'),
         ]
 
-    def gdo_init_sidebar(self, page):
-        user = GDO_User.current()
+    async def gdo_init_sidebar(self, page):
+        user = await GDO_User.current()
         if user.is_ghost():
             page._right_bar.add_field(GDT_Link().href(self.href('form')).text('module_login'))
         elif user.is_authenticated():
