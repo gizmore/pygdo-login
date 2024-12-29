@@ -5,6 +5,7 @@ from gdo.base.Util import Strings, module_enabled
 from gdo.core.GDO_User import GDO_User
 from gdo.core.GDT_Bool import GDT_Bool
 from gdo.core.GDT_Password import GDT_Password
+from gdo.core.GDT_Secret import GDT_Secret
 from gdo.core.GDT_UserType import GDT_UserType
 from gdo.core.connector.Web import Web
 from gdo.date.Time import Time
@@ -28,9 +29,12 @@ class form(MethodForm):
     def gdo_user_type(self) -> str | None:
         return GDT_UserType.GHOST
 
+    def gdo_needs_authentication(self) -> bool:
+        return False
+
     def gdo_create_form(self, form: GDT_Form) -> None:
         form.add_field(GDT_Login('login').not_null())
-        form.add_field(GDT_Password('password').not_null())
+        form.add_field(GDT_Secret('password').not_null())
         form.add_field(GDT_Bool('bind_ip').not_null().initial('1'))
         form.add_field(GDT_Url('_back_to').internal().hidden())
         super().gdo_create_form(form)
@@ -41,9 +45,7 @@ class form(MethodForm):
     def get_user(self, login: str) -> GDO_User | None:
         if hasattr(self, '_user'):
             return self._user
-        server = Web.get_server()
-        user = server.get_user_by_login(login)
-        if user:
+        if user := self._env_server.get_user_by_login(login):
             self._user = user
         return user
 
@@ -79,7 +81,7 @@ class form(MethodForm):
         return module_login.instance().cfg_failure_timeout()
 
     def max_attempts(self) -> int:
-        return self.module().cfg_failure_attempts()
+        return self.gdo_module().cfg_failure_attempts()
 
     def login_failed(self, user: GDO_User) -> GDT:
         ip = GDT_IP.current()

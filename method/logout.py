@@ -5,7 +5,10 @@ from gdo.base.Method import Method
 class logout(Method):
 
     def gdo_trigger(self) -> str:
-        return ""
+        return "logout"
+
+    def gdo_connectors(self) -> str:
+        return 'irc,web'
 
     def gdo_user_type(self) -> str | None:
         return 'member,guest'

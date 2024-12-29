@@ -53,7 +53,7 @@ class module_login(GDO_Module):
             page._right_bar.add_field(GDT_Link().href(self.href('logout')).text('mt_login_logout'))
 
     def set_password_for(self, user: GDO_User, password: str) -> None:
-        user.save_setting('password', GDT_Password.hash(password))
+        self.set_password_hash_for(user, GDT_Password.hash(password))
 
     def set_password_hash_for(self, user: GDO_User, password_hash: str) -> None:
         user.save_setting('password', password_hash)
