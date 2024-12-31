@@ -1,3 +1,4 @@
+from gdo.core.GDO_User import GDO_User
 from gdo.core.GDT_Bool import GDT_Bool
 from gdo.core.GDT_Password import GDT_Password
 from gdo.core.GDT_Secret import GDT_Secret
@@ -15,6 +16,11 @@ class irc(form):
 
     def gdo_connectors(self) -> str:
         return 'irc'
+
+    def gdo_has_permission(self, user: 'GDO_User'):
+        if user._authenticated:
+            return False
+        return True
 
     def gdo_user_type(self) -> str | None:
         return GDT_UserType.MEMBER
