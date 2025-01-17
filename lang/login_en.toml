@@ -1,5 +1,10 @@
 module_login = "Login"
 
+#############
+# GDT_Login #
+#############
+tt_login = "Your username or E-Mail"
+
 #########
 # Login #
 #########

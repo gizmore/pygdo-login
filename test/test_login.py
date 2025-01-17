@@ -8,12 +8,13 @@ from gdo.core.GDO_User import GDO_User
 from gdo.core.connector.Web import Web
 from gdo.login import module_login
 from gdo.mail import module_mail
-from gdotest.TestUtil import web_plug, reinstall_module, WebPlug
+from gdotest.TestUtil import web_plug, reinstall_module, WebPlug, GDOTestCase
 
 
-class LoginTest(unittest.TestCase):
+class LoginTest(GDOTestCase):
 
     def setUp(self):
+        super().setUp()
         Application.init(os.path.dirname(__file__ + "/../../../../"))
         loader = ModuleLoader.instance()
         loader.load_modules_db(True)
@@ -24,7 +25,6 @@ class LoginTest(unittest.TestCase):
         module_login.instance().set_password_for(user, '11111111')
         module_mail.instance().set_email_for(user, 'gizmore@gizmore.org')
         WebPlug.COOKIES = {}
-        return self
 
     def test_01_login_form_render(self):
         result = web_plug('login.form.html').post({"login": "gizmore", "password": "11111111"}).exec()
