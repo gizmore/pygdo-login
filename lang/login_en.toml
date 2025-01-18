@@ -1,5 +1,8 @@
 module_login = "Login"
 
+last_login_ip = "Last Login IP"
+last_login_datetime = "Last Login Time"
+
 #############
 # GDT_Login #
 #############

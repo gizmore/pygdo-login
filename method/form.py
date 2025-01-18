@@ -35,7 +35,7 @@ class form(MethodForm):
     def gdo_create_form(self, form: GDT_Form) -> None:
         form.add_field(GDT_Login('login').not_null())
         form.add_field(GDT_Secret('password').not_null())
-        form.add_field(GDT_Bool('bind_ip').not_null().initial('1'))
+        form.add_field(GDT_Bool('bind_ip').icon('url').tooltip('tt_bind_ip').not_null().initial('1'))
         form.add_field(GDT_Url('_back_to').internal().hidden())
         super().gdo_create_form(form)
 
@@ -133,4 +133,4 @@ class form(MethodForm):
         if back:
             link = GDT_Link().href(back).render()
             self.msg('msg_back_to', [link])
-        return self.get_form()
+        return self.empty()
