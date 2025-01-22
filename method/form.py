@@ -64,7 +64,7 @@ class form(MethodForm):
         min_time, count = self.ban_data()
         if int(count) >= self.max_attempts():
             banned_for = float(min_time) - self.ban_cut()
-            self.err('err_login_ban', [Time.human_duration(banned_for)])
+            self.err('err_login_ban', (Time.human_duration(banned_for),))
             return False
         return True
 
@@ -95,7 +95,7 @@ class form(MethodForm):
         min_time, attempts = self.ban_data()
         banned_for = float(min_time or 0) - self.ban_cut()
         attempts_left = self.max_attempts() - int(attempts)
-        self.err('err_login_failed', [attempts_left, Time.human_duration(banned_for)])
+        self.err('err_login_failed', (attempts_left, Time.human_duration(banned_for),))
         return self.get_form()
 
     def check_security_threat(self, user: GDO_User) -> None:
@@ -125,12 +125,12 @@ class form(MethodForm):
         self._user = user
         last_ip, last_date = self.get_last_login_data()
         if last_ip:
-            self.msg('msg_authenticated_again', [user.render_name(), Time.display_date(last_date), last_ip])
+            self.msg('msg_authenticated_again', (user.render_name(), Time.display_date(last_date), last_ip))
         else:
-            self.msg('msg_authenticated', [user.render_name()])
+            self.msg('msg_authenticated', (user.render_name(),))
         user.authenticate(self._env_session, bind_ip)
         back = self.param_val('_back_to')
         if back:
             link = GDT_Link().href(back).render()
-            self.msg('msg_back_to', [link])
+            self.msg('msg_back_to', (link,))
         return self.empty()
