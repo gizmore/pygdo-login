@@ -103,7 +103,7 @@ class form(MethodForm):
         cut = Time.get_date(self.ban_cut())
         condition = f"la_user={user.get_id()} AND la_created > '{cut}'"
         if table.count_where(condition) == 1:
-            if module_enabled('Mail'):
+            if module_enabled('mail'):
                 self.mail_security_threat(user)
 
     def mail_security_threat(self, user: GDO_User) -> None:
