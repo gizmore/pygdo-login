@@ -110,7 +110,7 @@ class form(MethodForm):
         mail = Mail.from_bot()
         mail.subject(t('mails_login_threat'))
         ip = GDT_IP.current()
-        args = [user.render_name(), sitename(), ip]
+        args = (user.render_name(), sitename(), ip)
         mail.body(t('mailb_login_threat', args))
         mail.send_to_user(user)
 
