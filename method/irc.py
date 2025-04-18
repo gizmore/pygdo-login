@@ -30,7 +30,7 @@ class irc(form):
         return False
 
     def gdo_create_form(self, form: GDT_Form) -> None:
-        form.add_field(GDT_Login('login').writable(False).hidden().initial(self._env_user.render_name()).not_null())
+        form.add_field(GDT_Login('login').writable(False).hidden().initial(self._env_user.get_name()).not_null())
         form.add_field(GDT_Secret('password').not_null())
         form.add_field(GDT_Bool('bind_ip').not_null().initial('1'))
         form.actions().add_field(GDT_Submit().calling(self.form_submitted).default_button())
