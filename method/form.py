@@ -23,7 +23,8 @@ from gdo.ui.GDT_Link import GDT_Link
 class form(MethodForm):
     _user: GDO_User
 
-    def gdo_trigger(self) -> str:
+    @classmethod
+    def gdo_trigger(cls) -> str:
         return ""
 
     def gdo_user_type(self) -> str | None:

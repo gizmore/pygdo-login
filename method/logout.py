@@ -5,7 +5,8 @@ from gdo.core.GDO_User import GDO_User
 
 class logout(Method):
 
-    def gdo_trigger(self) -> str:
+    @classmethod
+    def gdo_trigger(cls) -> str:
         return "logout"
 
     def gdo_connectors(self) -> str:

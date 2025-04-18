@@ -11,7 +11,8 @@ from gdo.login.method.form import form
 
 class irc(form):
 
-    def gdo_trigger(self) -> str:
+    @classmethod
+    def gdo_trigger(cls) -> str:
         return 'login'
 
     def gdo_connectors(self) -> str:
