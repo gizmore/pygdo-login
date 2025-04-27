@@ -85,10 +85,10 @@ class form(MethodForm):
         return self.gdo_module().cfg_failure_attempts()
 
     def login_failed(self, user: GDO_User) -> GDT:
-        ip = GDT_IP.current()
+        # ip = GDT_IP.current()
         userid = user.get_id() if user else None
         GDO_LoginAttempt.blank({
-            'la_ip': ip,
+            # 'la_ip': ip,
             'la_user': userid,
         }).insert()
         if user:
@@ -102,7 +102,7 @@ class form(MethodForm):
     def check_security_threat(self, user: GDO_User) -> None:
         table = GDO_LoginAttempt.table()
         cut = Time.get_date(self.ban_cut())
-        condition = f"la_user={user.get_id()} AND la_created > '{cut}'"
+        condition = f"la_user={user.get_id()} AND la_created>'{cut}'"
         if table.count_where(condition) == 1:
             if module_enabled('mail'):
                 self.mail_security_threat(user)

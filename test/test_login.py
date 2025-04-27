@@ -3,8 +3,6 @@ import unittest
 
 from gdo.base.Application import Application
 from gdo.base.ModuleLoader import ModuleLoader
-from gdo.base.Trans import t
-from gdo.core.GDO_User import GDO_User
 from gdo.core.connector.Web import Web
 from gdo.login import module_login
 from gdo.mail import module_mail
