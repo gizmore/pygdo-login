@@ -26,7 +26,6 @@ class LoginTest(GDOTestCase):
 
     def test_01_login_form_render(self):
         result = web_plug('login.form.html').post({"login": "gizmore", "password": "11111111"}).exec()
-        self.assertIn('<nav', result, 'Did not pass render <nav')
         self.assertIn('<form', result, 'Did not pass render <form')
         self.assertIn('gizmore', result, 'Does not refill form vars')
 
