@@ -20,7 +20,7 @@ class change_password(MethodForm):
         return False
 
     def gdo_create_form(self, form: GDT_Form) -> None:
-        form.add_field(
+        form.add_fields(
             GDT_Password('old').label('old_password').not_null(),
             GDT_Validator().validator(form, 'old', self.validate_old_pass),
             GDT_Password('new').label('new_password').tooltip('tt_password').not_null(),
