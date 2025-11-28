@@ -41,11 +41,11 @@ class change_password(MethodForm):
             return field.error('err_password_retype')
         return True
 
-    def form_submitted(self):
+    async def gdo_execute(self):
         user = self._env_user
         mod = module_login.instance()
         old = self.param_val('old')
         new = self.param_val('new')
         mod.set_password_for(user, new)
-        Application.EVENTS.publish('password_changed', user, old, new)  # GPG can hook here and re-encrypt the public key
+        await Application.EVENTS.publish('password_changed', user, old, new)  # GPG can hook here and re-encrypt the public key
         return self.msg('msg_password_changed')
