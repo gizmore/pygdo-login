@@ -11,15 +11,15 @@ from gdotest.TestUtil import web_plug, reinstall_module, WebPlug, GDOTestCase
 
 class LoginTest(GDOTestCase):
 
-    def setUp(self):
-        super().setUp()
+    async def asyncSetUp(self):
+        await super().asyncSetUp()
         Application.init(os.path.dirname(__file__ + "/../../../../"))
         loader = ModuleLoader.instance()
         loader.load_modules_db(True)
         reinstall_module('login')
         reinstall_module('mail')
         loader.init_modules(True, True)
-        user = Web.get_server().get_or_create_user('gizmore')
+        user = await Web.get_server().get_or_create_user('gizmore')
         module_login.instance().set_password_for(user, '11111111')
         module_mail.instance().set_email_for(user, 'gizmore@gizmore.org')
         WebPlug.COOKIES = {}
