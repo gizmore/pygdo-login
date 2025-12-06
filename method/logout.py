@@ -20,6 +20,6 @@ class logout(Method):
             return True
         return True
 
-    def gdo_execute(self) -> GDT:
-        self._env_user.logout(self._env_session)
+    async def gdo_execute(self) -> GDT:
+        await self._env_user.logout(self._env_session)
         return self.msg('msg_logged_out')

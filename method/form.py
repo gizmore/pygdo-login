@@ -40,8 +40,8 @@ class form(MethodForm):
         form.add_field(GDT_Url('_back_to').internal().hidden())
         super().gdo_create_form(form)
 
-    def form_submitted(self):
-        return self.on_login(self.param_val('login'), self.param_val('password'), self.param_value('bind_ip'))
+    async def form_submitted(self):
+        return await self.on_login(self.param_val('login'), self.param_val('password'), self.param_value('bind_ip'))
 
     def get_user(self, login: str) -> GDO_User | None:
         if hasattr(self, '_user'):
@@ -50,7 +50,7 @@ class form(MethodForm):
             self._user = user
         return user
 
-    def on_login(self, login: str, password: str, bind_ip: bool = False) -> GDT:
+    async def on_login(self, login: str, password: str, bind_ip: bool = False) -> GDT:
         if not self.ban_check():
             return self.get_form()
         user = self.get_user(login)
@@ -59,7 +59,7 @@ class form(MethodForm):
         hash_ = user.get_setting_val('password')
         if not hash_ or not GDT_Password.check(hash_, password):
             return self.login_failed(user)
-        return self.login_success(user, bind_ip)
+        return await self.login_success(user, bind_ip)
 
     def ban_check(self) -> bool:
         min_time, count = self.ban_data()
@@ -122,14 +122,14 @@ class form(MethodForm):
             return ip, dt
         return None, None
 
-    def login_success(self, user: GDO_User, bind_ip: bool = False) -> GDT:
+    async def login_success(self, user: GDO_User, bind_ip: bool = False) -> GDT:
         self._user = user
         last_ip, last_date = self.get_last_login_data()
         if last_ip:
             self.msg('msg_authenticated_again', (user.render_name(), Time.display_date(last_date), last_ip))
         else:
             self.msg('msg_authenticated', (user.render_name(),))
-        user.authenticate(self._env_session, bind_ip)
+        await user.authenticate(self._env_session, bind_ip)
         back = self.param_val('_back_to')
         if back:
             link = GDT_Link().href(back).render()
