@@ -41,7 +41,7 @@ class module_login(GDO_Module):
     def gdo_user_config(self) -> list[GDT]:
         return [
             GDT_Password('password'),
-            GDT_IP('last_login_ip'),
+            GDT_IP('last_login_ip').secret(),
             GDT_DateTime('last_login_datetime'),
         ]
 
