@@ -22,7 +22,6 @@ class LoginTest(GDOTestCase):
         user = await Web.get_server().get_or_create_user('gizmore')
         module_login.instance().set_password_for(user, '11111111')
         module_mail.instance().set_email_for(user, 'gizmore@gizmore.org')
-        WebPlug.COOKIES = {}
 
     def test_01_login_form_render(self):
         result = web_plug('login.form.html').post({"login": "gizmore", "password": "11111111"}).exec()
@@ -67,7 +66,8 @@ class LoginTest(GDOTestCase):
     def test_08_login_session(self):
         web_plug('login.logout.html').exec()
         post_data = {"submit": "1", "bind_ip": "1", "login": "gizmore@gizmore.org", "password": "11111111", '_back_to': '/core.welcome.html'}
-        web_plug('login.form.html').post(post_data).exec()
+        result = web_plug('login.form.html').post(post_data).exec()
+        self.assertIn('Welcome back', result, 'Login does not work')
         result = web_plug('login.form.html').exec()
         self.assertIn('method is restricted to', result, 'Authentication did not persist in session')
         web_plug('login.logout.html')
