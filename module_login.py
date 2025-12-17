@@ -42,7 +42,7 @@ class module_login(GDO_Module):
         return [
             GDT_Password('password'),
             GDT_IP('last_login_ip').secret(),
-            GDT_DateTime('last_login_datetime'),
+            GDT_DateTime('last_login_datetime').secret(),
         ]
 
     def gdo_init_sidebar(self, page):
