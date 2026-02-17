@@ -8,6 +8,7 @@ from gdo.date.GDT_Duration import GDT_Duration
 from gdo.login.GDO_LoginAttempt import GDO_LoginAttempt
 from gdo.net.GDT_IP import GDT_IP
 from gdo.ui.GDT_Link import GDT_Link
+from gdo.base.GDO import GDO
 
 
 class module_login(GDO_Module):
@@ -21,7 +22,7 @@ class module_login(GDO_Module):
             'form',
         ]
 
-    def gdo_classes(self):
+    def gdo_classes(self) -> list[type[GDO]]:
         return [
             GDO_LoginAttempt,
         ]
