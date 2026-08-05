@@ -1,6 +1,5 @@
 from gdo.core.GDO_User import GDO_User
 from gdo.core.GDT_Bool import GDT_Bool
-from gdo.core.GDT_Password import GDT_Password
 from gdo.core.GDT_Secret import GDT_Secret
 from gdo.core.GDT_UserType import GDT_UserType
 from gdo.form.GDT_Form import GDT_Form
