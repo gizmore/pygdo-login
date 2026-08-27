@@ -56,10 +56,16 @@ class form(MethodForm):
         user = self.get_user(login)
         if not user:
             return self.login_failed(user)
+        if user.is_deleted():
+            return self.login_deleted()
         hash_ = user.get_setting_val('password')
         if not hash_ or not GDT_Password.check(hash_, password):
             return self.login_failed(user)
         return await self.login_success(user, bind_ip)
+
+    def login_deleted(self) -> GDT:
+        self.err('err_login_deleted')
+        return self.get_form()
 
     def ban_check(self) -> bool:
         min_time, count = self.ban_data()
