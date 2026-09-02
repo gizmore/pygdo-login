@@ -39,6 +39,7 @@ class form(MethodForm):
         form.add_field(GDT_Bool('bind_ip').icon('url').tooltip('tt_bind_ip').not_null().initial('1'))
         form.add_field(GDT_Url('_back_to').internal().hidden())
         super().gdo_create_form(form)
+        Application.EVENTS.publish_sync('login_form_links', self, form)
 
     async def form_submitted(self):
         return await self.on_login(self.param_val('login'), self.param_val('password'), self.param_value('bind_ip'))
