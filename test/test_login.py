@@ -39,7 +39,9 @@ class LoginTest(GDOTestCase):
     def test_04_login_form_correct(self):
         web_plug('login.logout.html').exec()
         result = web_plug('login.form.html').post({"submit": "1", "bind_ip": "1", "login": "gizmore", "password": "11111111"}).exec()
-        self.assertIn('Welcome back gizmore', result, 'login.form does not work with correct credentials')
+        self.assertIn('Welcome back', result, 'login.form does not work with correct credentials')
+        self.assertIn('"user_id":"', result, 'Login response does not render a current user')
+        self.assertNotIn('"user_id":"0"', result, 'Login response still renders the guest menu')
 
     def test_05_login_form_correct_via_email(self):
         web_plug('login.logout.html').exec()
