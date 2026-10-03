@@ -13,7 +13,7 @@ class LoginTest(GDOTestCase):
 
     async def asyncSetUp(self):
         await super().asyncSetUp()
-        Application.init(os.path.dirname(__file__ + "/../../../../"))
+        Application.init_test(os.path.dirname(__file__ + "/../../../../"))
         loader = ModuleLoader.instance()
         loader.load_modules_db(True)
         reinstall_module('login')
